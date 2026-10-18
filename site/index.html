@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BrandsToTry</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column lookbook — category tabs, then a row of brand chips, then a 4-up product grid for the chosen brand */
+:root{
+  --bg:#F2F4F1; --surface:#FFFFFF; --fg:#1D2420; --muted:#5E6A63; --line:#D5DCD6;
+  --accent:#2E4B7C; --accent-soft:#E2E8F2; --chip:#E8ECE8;
+  --display:"Gloock",Georgia,"Times New Roman",serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151A17; --surface:#1E2521; --fg:#E7ECE8; --muted:#9AA79F; --line:#323C36;
+  --accent:#9DB4E0; --accent-soft:#25314A; --chip:#252D28; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151A17; --surface:#1E2521; --fg:#E7ECE8; --muted:#9AA79F; --line:#323C36;
+  --accent:#9DB4E0; --accent-soft:#25314A; --chip:#252D28; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,6vw,3.6rem);line-height:1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header p{color:var(--muted);margin:12px 0 0;max-width:60ch}
+.cats{display:flex;gap:4px;margin-top:32px;border-bottom:1px solid var(--line);overflow-x:auto}
+.cat{appearance:none;border:0;background:none;color:var(--muted);font:600 .8rem/1 var(--body);
+  text-transform:uppercase;letter-spacing:.12em;padding:14px 14px 13px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.cat .n{font-weight:500;letter-spacing:0;margin-left:6px;opacity:.7}
+.cat[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.cat:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{appearance:none;border:1px solid transparent;background:var(--chip);color:var(--fg);font:500 .9rem/1 var(--body);
+  padding:10px 14px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--line)}
+.chip[aria-selected="true"]{background:var(--accent);color:var(--bg)}
+.brandhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;margin-top:36px}
+.brandhead h2{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,4vw,2.2rem);margin:0;line-height:1.1}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;font-size:.88rem}
+.tag{background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:3px 8px;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.visit{color:var(--accent);font-weight:600;text-decoration:none}
+.visit:hover{text-decoration:underline}
+.note{color:var(--muted);margin:10px 0 0;font-size:.9rem;max-width:65ch}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:20px}
+@media (max-width:820px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+.card{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;min-width:0}
+.ph{aspect-ratio:3/4;max-width:100%;background:var(--surface);border:1px solid var(--line);overflow:hidden;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.card:hover .ph img{transform:scale(1.03)}
+.ph .fb{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;color:var(--muted);font-size:.85rem}
+.ph .fb b{display:block;font-family:var(--display);font-weight:400;font-size:2.4rem;color:var(--fg);opacity:.25;line-height:1}
+.t{font-weight:500;line-height:1.3;min-width:0}
+.card:hover .t{text-decoration:underline}
+.pr{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.9rem;margin-top:-6px}
+.empty{margin-top:20px;padding:28px;border:1px dashed var(--line);color:var(--muted)}
+footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;max-width:70ch}
+@media (prefers-reduced-motion:reduce){.ph img{transition:none}}
+</style>
+
+</head><body><div class="wrap">
+  <header>
+    <h1>BrandsToTry</h1>
+    <p>Homegrown Indian labels for bags, shoes and clothing, made sustainably and ethically. Curated by MK, to be tried soon.<br>Pick a category, then a brand, to see its popular pieces.</p>
+  </header>
+  <nav class="cats" role="tablist" aria-label="Category" id="cats"></nav>
+  <div class="chips" role="tablist" aria-label="Brand" id="chips"></div>
+  <section id="panel" aria-live="polite"></section>
+  <footer>Prices and stock are as listed on each brand's site in October 2026 and may have changed.<span id="upd"></span> "Bestsellers" means the brand's own bestsellers collection. Otherwise the products are the brand's featured or latest pieces.</footer>
+</div>
+
+<script>
+let BRANDS = [];
+const CATS = ["Bags","Shoes","Clothing"];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let state = {cat:"Bags", brand:null};
+try { const s = JSON.parse(localStorage.getItem("nbtt")||"null"); if (s && CATS.includes(s.cat)) state = s; } catch(e){}
+const h = location.hash.slice(1).toLowerCase();
+const fromHash = CATS.find(c => c.toLowerCase() === h); if (fromHash) state = {cat:fromHash, brand:null};
+
+function inCat(c){ return BRANDS.filter(b => b.cat === c).sort((a,b) => a.name.localeCompare(b.name)); }
+function save(){ try { localStorage.setItem("nbtt", JSON.stringify(state)); } catch(e){} }
+
+function renderCats(){
+  $("cats").innerHTML = CATS.map(c => `<button class="cat" role="tab" id="cat-${c}" aria-selected="${c===state.cat}" data-c="${c}">${c}<span class="n">${inCat(c).length}</span></button>`).join("");
+}
+function renderChips(){
+  const list = inCat(state.cat);
+  if (!list.some(b => b.name === state.brand)) state.brand = list[0]?.name;
+  $("chips").innerHTML = list.map(b => `<button class="chip" role="tab" aria-selected="${b.name===state.brand}" data-b="${esc(b.name)}">${esc(b.name)}</button>`).join("");
+}
+function initial(n){ return esc(n.replace(/^the\s+/i,"").charAt(0).toUpperCase()); }
+function renderPanel(){
+  const b = BRANDS.find(x => x.name === state.brand);
+  if (!b){ $("panel").innerHTML = ""; return; }
+  const site = b.site ? `<a class="visit" href="${esc(b.site)}" target="_blank" rel="noopener">Visit ${esc(b.site.replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,""))} ↗</a>` : "";
+  const tag = b.src ? `<span class="tag">${esc(b.src)}</span>` : "";
+  const cards = b.products.map(p => `
+    <a class="card" href="${esc(p.url)}" target="_blank" rel="noopener">
+      <div class="ph">
+        <div class="fb"><div><b>${initial(b.name)}</b>Picture unavailable<br>View on site</div></div>
+        <img src="${esc(p.local||p.img)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer" data-r="${esc(p.img)}" onload="this.previousElementSibling.remove()" onerror="if(this.dataset.r&&this.src!==this.dataset.r){this.src=this.dataset.r}else{this.remove()}">
+      </div>
+      <div class="t">${esc(p.title)}</div>
+      ${p.price ? `<div class="pr">${esc(p.price)}</div>` : ""}
+    </a>`).join("");
+  $("panel").innerHTML = `
+    <div class="brandhead"><h2>${esc(b.name)}</h2><div class="meta">${tag}${site}</div></div>
+    ${b.note ? `<p class="note">${esc(b.note)}</p>` : ""}
+    ${b.products.length ? `<div class="grid">${cards}</div>` : `<div class="empty">No products to show yet.</div>`}`;
+}
+function render(){ renderCats(); renderChips(); renderPanel(); save(); }
+$("cats").addEventListener("click", e => { const t = e.target.closest(".cat"); if (!t) return; state = {cat:t.dataset.c, brand:null}; render(); });
+$("chips").addEventListener("click", e => { const t = e.target.closest(".chip"); if (!t) return; state.brand = t.dataset.b; renderChips(); renderPanel(); save(); });
+fetch("brands.json").then(r=>r.json()).then(d=>{BRANDS=d.brands;if(d.updated){const f=$("upd");f.textContent=" Last updated "+new Date(d.updated).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})+"."}render()}).catch(()=>{$("panel").innerHTML='<div class="empty">Could not load the brand list.</div>'});
+</script>
+
+</body></html>

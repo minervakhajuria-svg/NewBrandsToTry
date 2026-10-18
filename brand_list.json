@@ -1,0 +1,171 @@
+[
+ {
+  "name": "Amama",
+  "cat": "Bags",
+  "site": "https://www.amama.in/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": "bestsellers",
+  "only_type": "Bags"
+ },
+ {
+  "name": "AMPM",
+  "cat": "Bags",
+  "site": "https://ampm.in/",
+  "src": "Ladies' bags",
+  "note": "",
+  "handle": "ladies-bags"
+ },
+ {
+  "name": "Banjaaran Studio",
+  "cat": "Shoes",
+  "site": "https://banjaaran.in/",
+  "src": "Women's collection",
+  "note": "",
+  "handle": "womens-collection"
+ },
+ {
+  "name": "Ceecee",
+  "cat": "Shoes",
+  "site": "https://shopceecee.com/",
+  "src": "Best picks",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Chal Shoes",
+  "cat": "Shoes",
+  "site": "https://chalshoes.in/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Daang",
+  "cat": "Shoes",
+  "site": "https://www.dangshoes.com/",
+  "src": "Bestsellers (women's)",
+  "note": "",
+  "handle": "best-sellers"
+ },
+ {
+  "name": "Disobedience",
+  "cat": "Shoes",
+  "site": "https://thedisobedience.com/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Drawn",
+  "cat": "Clothing",
+  "site": "https://shopdrawn.com/",
+  "src": "Latest products",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "July Issue",
+  "cat": "Clothing",
+  "site": "https://julyissue.com/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Khara Kapas",
+  "cat": "Clothing",
+  "site": "https://kharakapas.com/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Kilchu",
+  "cat": "Shoes",
+  "site": "https://kilchu.com/",
+  "src": "From women's footwear",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Mai Soli",
+  "cat": "Bags",
+  "site": "https://maisoli.in/",
+  "src": "Women's bestsellers",
+  "note": "",
+  "handle": "best-selling-womens-bags"
+ },
+ {
+  "name": "Mistry",
+  "cat": "Bags",
+  "site": "https://www.shopmistry.com/",
+  "src": "From the handbags collection",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Nappa Dori",
+  "cat": "Bags",
+  "site": "https://www.nappadori.com/",
+  "src": "Women's bestsellers",
+  "note": "",
+  "handle": "bestseller-women"
+ },
+ {
+  "name": "Slomotion",
+  "cat": "Shoes",
+  "site": "https://www.slomotion.in/",
+  "src": "Women's collection",
+  "note": "",
+  "handle": "women"
+ },
+ {
+  "name": "Tanned",
+  "cat": "Bags",
+  "site": "https://tanned.in/",
+  "src": "Featured: Season's Hottest",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "The Jodi Life",
+  "cat": "Clothing",
+  "site": "https://thejodilife.com/",
+  "src": "Best-selling styles",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "The Summer House",
+  "cat": "Clothing",
+  "site": "https://thesummerhouse.in/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Tiger Marron",
+  "cat": "Bags",
+  "site": "https://www.tigermarron.com/",
+  "src": "For her",
+  "note": "",
+  "handle": "for-her"
+ },
+ {
+  "name": "Tin & Tah (Tintah)",
+  "cat": "Bags",
+  "site": "https://tintah.com/",
+  "src": "Featured on homepage",
+  "note": "",
+  "handle": ""
+ },
+ {
+  "name": "Verb by Pallavi Singhee",
+  "cat": "Clothing",
+  "site": "https://shopverb.com/",
+  "src": "Bestsellers",
+  "note": "",
+  "handle": ""
+ }
+]
