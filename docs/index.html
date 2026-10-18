@@ -54,18 +54,17 @@ header p{color:var(--muted);margin:12px 0 0;max-width:60ch}
 .pr{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.9rem;margin-top:-6px}
 .empty{margin-top:20px;padding:28px;border:1px dashed var(--line);color:var(--muted)}
 footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;max-width:70ch}
-.share{margin-top:56px;padding:24px;background:var(--surface);border:1px solid var(--line)}
+.share{margin-top:28px;padding:24px;max-width:560px;background:var(--surface);border:1px solid var(--line)}
+[hidden]{display:none!important}
 .share h2{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,4vw,2rem);margin:0;line-height:1.1}
 .share p{color:var(--muted);margin:8px 0 0;max-width:60ch}
-.share form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.share .full{grid-column:1/-1}
+.share form{display:grid;gap:14px;margin-top:18px}
 .share label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:4px}
 .share input,.share textarea{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);padding:10px 12px;border-radius:0}
 .share input:focus-visible,.share textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .share button{appearance:none;border:0;background:var(--accent);color:var(--bg);font:600 .9rem/1 var(--body);padding:12px 20px;cursor:pointer;justify-self:start}
 .share button:disabled{opacity:.6;cursor:default}
 #shareMsg{margin:0;font-size:.9rem;align-self:center}
-@media (max-width:620px){.share form{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.ph img{transition:none}}
 </style>
 
@@ -77,16 +76,14 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
   <nav class="cats" role="tablist" aria-label="Category" id="cats"></nav>
   <div class="chips" role="tablist" aria-label="Brand" id="chips"></div>
   <section id="panel" aria-live="polite"></section>
-  <section class="share" id="share">
+  <section class="share" id="sharePanel" hidden>
     <h2>Share your picks</h2>
-    <p>Know a homegrown label that belongs here? Tell me about it and I'll take a look.</p>
+    <p>Know a homegrown label that belongs here? Tell me and I'll take a look.</p>
     <form id="shareForm">
-      <div class="full"><label for="sb">Brand name</label><input id="sb" name="brand" required maxlength="120"></div>
-      <div class="full"><label for="sw">Website or Instagram (optional)</label><input id="sw" name="link" maxlength="200"></div>
-      <div class="full"><label for="sy">Why you like it (optional)</label><textarea id="sy" name="why" rows="3" maxlength="600"></textarea></div>
+      <div><label for="sb">Brand name</label><input id="sb" name="brand" required maxlength="120"></div>
       <div><label for="sn">Your name (optional)</label><input id="sn" name="from" maxlength="80"></div>
       <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none">
-      <div class="full" style="display:flex;gap:16px;flex-wrap:wrap"><button type="submit" id="shareBtn">Send</button><p id="shareMsg" role="status"></p></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap"><button type="submit" id="shareBtn">Send</button><p id="shareMsg" role="status"></p></div>
     </form>
   </section>
   <footer>Prices and stock are as listed on each brand's site in October 2026 and may have changed.<span id="upd"></span> "Bestsellers" means the brand's own bestsellers collection. Otherwise the products are the brand's featured or latest pieces.</footer>
@@ -94,19 +91,19 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
 
 <script>
 let BRANDS = [];
-const CATS = ["Bags","Shoes","Clothing"];
+const CATS = ["Bags","Shoes","Clothing"], SHARE = "Share Your Picks", TABS = [...CATS, SHARE];
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let state = {cat:"Bags", brand:null};
-try { const s = JSON.parse(localStorage.getItem("nbtt")||"null"); if (s && CATS.includes(s.cat)) state = s; } catch(e){}
+try { const s = JSON.parse(localStorage.getItem("nbtt")||"null"); if (s && TABS.includes(s.cat)) state = s; } catch(e){}
 const h = location.hash.slice(1).toLowerCase();
-const fromHash = CATS.find(c => c.toLowerCase() === h); if (fromHash) state = {cat:fromHash, brand:null};
+const fromHash = TABS.find(c => c.toLowerCase().replace(/\s/g,"") === h || (c === SHARE && h === "share")); if (fromHash) state = {cat:fromHash, brand:null};
 
 function inCat(c){ return BRANDS.filter(b => b.cat === c).sort((a,b) => a.name.localeCompare(b.name)); }
 function save(){ try { localStorage.setItem("nbtt", JSON.stringify(state)); } catch(e){} }
 
 function renderCats(){
-  $("cats").innerHTML = CATS.map(c => `<button class="cat" role="tab" id="cat-${c}" aria-selected="${c===state.cat}" data-c="${c}">${c}<span class="n">${inCat(c).length}</span></button>`).join("");
+  $("cats").innerHTML = TABS.map(c => `<button class="cat" role="tab" aria-selected="${c===state.cat}" data-c="${c}">${c}${c===SHARE?"":`<span class="n">${inCat(c).length}</span>`}</button>`).join("");
 }
 function renderChips(){
   const list = inCat(state.cat);
@@ -133,7 +130,11 @@ function renderPanel(){
     ${b.note ? `<p class="note">${esc(b.note)}</p>` : ""}
     ${b.products.length ? `<div class="grid">${cards}</div>` : `<div class="empty">No products to show yet.</div>`}`;
 }
-function render(){ renderCats(); renderChips(); renderPanel(); save(); }
+function render(){
+  const sh = state.cat === SHARE;
+  $("sharePanel").hidden = !sh; $("chips").hidden = sh; $("panel").hidden = sh;
+  renderCats(); if (!sh){ renderChips(); renderPanel(); } save();
+}
 $("cats").addEventListener("click", e => { const t = e.target.closest(".cat"); if (!t) return; state = {cat:t.dataset.c, brand:null}; render(); });
 $("chips").addEventListener("click", e => { const t = e.target.closest(".chip"); if (!t) return; state.brand = t.dataset.b; renderChips(); renderPanel(); save(); });
 fetch("brands.json").then(r=>r.json()).then(d=>{BRANDS=d.brands;if(d.updated){const f=$("upd");f.textContent=" Last updated "+new Date(d.updated).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})+"."}render()}).catch(()=>{$("panel").innerHTML='<div class="empty">Could not load the brand list.</div>'});
@@ -146,7 +147,7 @@ $("shareForm").addEventListener("submit", async e => {
   try {
     const r = await fetch("https://api.web3forms.com/submit", {method:"POST", headers:{"Content-Type":"application/json",Accept:"application/json"},
       body: JSON.stringify({access_key:WEB3FORMS_KEY, subject:"BrandsToTry suggestion: "+f.brand.value, from_name:"BrandsToTry",
-        brand:f.brand.value, link:f.link.value, why:f.why.value, suggested_by:f.from.value||"(anonymous)"})});
+        brand:f.brand.value, suggested_by:f.from.value||"(anonymous)"})});
     const d = await r.json();
     if (!d.success) throw new Error(d.message);
     f.reset(); msg.textContent = "Thank you! I'll take a look.";
