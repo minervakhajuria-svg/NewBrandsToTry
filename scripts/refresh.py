@@ -55,10 +55,10 @@ def main():
     existing = {b["name"]: b for b in json.load(open(ROOT / "brands.json", encoding="utf-8"))}
     brands = []
     for row in json.load(open(ROOT / "brand_list.json", encoding="utf-8")):
-        b = {k: row[k] for k in ("name", "cat", "docs", "src", "note")}
+        b = {k: row[k] for k in ("name", "cat", "site", "src", "note")}
         prods = existing.get(row["name"], {}).get("products", [])
         if row.get("handle") and not no_fetch:
-            try: prods = shopify(row["docs"], row["handle"], row.get("only_type", ""))
+            try: prods = shopify(row["site"], row["handle"], row.get("only_type", ""))
             except Exception as e: print("fetch failed", row["name"], e)
         b["products"] = [dict(p) for p in prods]
         brands.append(b)
