@@ -42,7 +42,7 @@ def shopify(site, handle, only_type=""):
 
 def localise(url):
     name = hashlib.sha1(url.encode()).hexdigest()[:12] + ".webp"
-    dest = ROOT / "site" / "img" / name
+    dest = ROOT / "docs" / "img" / name
     if not dest.exists():
         im = Image.open(io.BytesIO(get(url))).convert("RGB")
         if im.width > 600:
@@ -55,10 +55,10 @@ def main():
     existing = {b["name"]: b for b in json.load(open(ROOT / "brands.json", encoding="utf-8"))}
     brands = []
     for row in json.load(open(ROOT / "brand_list.json", encoding="utf-8")):
-        b = {k: row[k] for k in ("name", "cat", "site", "src", "note")}
+        b = {k: row[k] for k in ("name", "cat", "docs", "src", "note")}
         prods = existing.get(row["name"], {}).get("products", [])
         if row.get("handle") and not no_fetch:
-            try: prods = shopify(row["site"], row["handle"], row.get("only_type", ""))
+            try: prods = shopify(row["docs"], row["handle"], row.get("only_type", ""))
             except Exception as e: print("fetch failed", row["name"], e)
         b["products"] = [dict(p) for p in prods]
         brands.append(b)
@@ -69,7 +69,7 @@ def main():
                     try: p["local"] = localise(p["img"])
                     except Exception as e: print("image failed", b["name"], p["title"], e)
     out = {"updated": datetime.date.today().isoformat(), "brands": brands}
-    json.dump(out, open(ROOT / "site" / "brands.json", "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump(out, open(ROOT / "docs" / "brands.json", "w", encoding="utf-8"), ensure_ascii=False)
     print("brands:", len(brands), "products:", sum(len(b["products"]) for b in brands))
 
 main()
