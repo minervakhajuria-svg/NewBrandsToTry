@@ -2,7 +2,7 @@
 
 brand_list.json rows: name, cat, site, src, note, handle (Shopify collection handle, may be "").
 - handle set  -> fetch https://<site>/collections/<handle>/products.json?limit=4
-- handle empty -> keep the curated products already in brands.json (the project root copy)
+- handle empty or fetch fails -> keep the products already in docs/brands.json
 Then every product image is downloaded, resized to ~600px wide WebP into docs/img/.
 
 Usage: python scripts/refresh.py [--no-fetch] [--no-images]
@@ -52,7 +52,7 @@ def localise(url):
 
 def main():
     no_fetch, no_img = "--no-fetch" in sys.argv, "--no-images" in sys.argv
-    existing = {b["name"]: b for b in json.load(open(ROOT / "brands.json", encoding="utf-8"))}
+    existing = {b["name"]: b for b in json.load(open(ROOT / "docs" / "brands.json", encoding="utf-8"))["brands"]}  # fallback if a fetch fails
     brands = []
     for row in json.load(open(ROOT / "brand_list.json", encoding="utf-8")):
         b = {k: row[k] for k in ("name", "cat", "site", "src", "note")}
