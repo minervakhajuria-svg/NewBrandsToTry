@@ -5,7 +5,7 @@ brand_list.json rows: name, cat, site, src, note, handle (Shopify collection han
 - handle empty or fetch fails -> keep the products already in docs/brands.json
 Then every product image is downloaded, resized to ~600px wide WebP into docs/img/.
 
-Usage: python scripts/refresh.py [--no-fetch] [--no-images]
+Usage: python scripts/refresh.py [--no-fetch] [--no-images] [--only "Brand A,Brand B"]
 """
 import json, re, sys, hashlib, io, urllib.request, datetime, pathlib
 from PIL import Image
@@ -52,12 +52,13 @@ def localise(url):
 
 def main():
     no_fetch, no_img = "--no-fetch" in sys.argv, "--no-images" in sys.argv
+    only = set(sys.argv[sys.argv.index("--only") + 1].split(",")) if "--only" in sys.argv else None
     existing = {b["name"]: b for b in json.load(open(ROOT / "docs" / "brands.json", encoding="utf-8"))["brands"]}  # fallback if a fetch fails
     brands = []
     for row in json.load(open(ROOT / "brand_list.json", encoding="utf-8")):
         b = {k: row[k] for k in ("name", "cat", "site", "src", "note")}
         prods = existing.get(row["name"], {}).get("products", [])
-        if row.get("handle") and not no_fetch:
+        if row.get("handle") and not no_fetch and (only is None or row["name"] in only):
             try: prods = shopify(row["site"], row["handle"], row.get("only_type", ""))
             except Exception as e: print("fetch failed", row["name"], e)
         b["products"] = [dict(p) for p in prods]

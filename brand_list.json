@@ -113,6 +113,14 @@
   "handle": "bestseller-women"
  },
  {
+  "name": "Raw Mango",
+  "cat": "Clothing",
+  "site": "https://rawmango.com/",
+  "src": "New arrivals",
+  "note": "A handloom-focused label by Sanjay Garg, working with craftspeople across India on saris and garments.",
+  "handle": "new-arrival"
+ },
+ {
   "name": "Slomotion",
   "cat": "Shoes",
   "site": "https://www.slomotion.in/",
